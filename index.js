@@ -20,9 +20,15 @@ client.on('messageCreate', message => {
       content: "草"
     });
   }
-  if (Math.round(Math.random() * 10) == 1) {
+  if (Math.round(Math.random() * 1000) == 1) {
     message.reply({
-      content: "草"
+      content: "森"
+    });
+  }
+　if (Math.round(Math.random() * 10000) == 1) {
+    message.reply({
+      content: "パンパース!!!",
+	  files: ['https://d2dcan0armyq93.cloudfront.net/photo/odai/600/c7effe7958ef53366d97345f37012ee4_600.jpg']
     });
   }
 });
@@ -30,8 +36,20 @@ client.on('messageCreate', message => {
 //Discordへの接続
 client.login(token);
 
+
+
 const http = require("http");
-http.createServer(function(req,res){
-  res.end("Hello, World!");
+http.createServer(async function(req, res) {
+  console.log(req.headers.referer);
+  let di = await fetch("https://discord.com/api/v9");
+  let a = "レート制限";
+  if (di.status == 429) {
+    console.log(di.headers.get("retry-after"));
+    a += "がかかっちゃってます。レート制限は" + di.headers.get("retry-after") + "秒後に解除されるそうです。";
+  } else {
+    a += "はかかっていません。";
   }
-).listen(3000);
+  res.write(a);
+  res.writeHead(200, { "content-type": "text/html;charset=utf-8" })
+  res.end();
+}).listen(4545);
